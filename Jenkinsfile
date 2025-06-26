@@ -24,12 +24,10 @@ pipeline {
 
         stage('Setting up virtual environment and installing dependencies') {
             steps {
-                script {
-                    echo 'Setting up virtual environment and installing dependencies...'
-                }
+                echo 'Setting up virtual environment and installing dependencies...'
                 sh '''
-                    python -m venv ${VENV_DIR}
-                    source ${VENV_DIR}/bin/activate
+                    python3 -m venv ${VENV_DIR}
+                    . ${VENV_DIR}/bin/activate
                     pip install --upgrade pip
                     pip install -e .
                 '''
@@ -38,11 +36,9 @@ pipeline {
 
         stage('Run Training Pipeline') {
             steps {
-                script {
-                    echo 'Running training pipeline...'
-                }
+                echo 'Running training pipeline...'
                 sh '''
-                    source ${VENV_DIR}/bin/activate
+                    . ${VENV_DIR}/bin/activate
                     python pipeline/training_pipeline.py
                 '''
             }
@@ -50,11 +46,9 @@ pipeline {
 
         stage('Start Application') {
             steps {
-                script {
-                    echo 'Starting application...'
-                }
+                echo 'Starting application...'
                 sh '''
-                    source ${VENV_DIR}/bin/activate
+                    . ${VENV_DIR}/bin/activate
                     python application.py
                 '''
             }
