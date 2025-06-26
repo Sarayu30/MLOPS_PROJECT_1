@@ -1,15 +1,14 @@
 pipeline {
     agent any
-
     environment {
-        VENV_DIR = 'venv'
+        VENV_DIR = 'venv'  // Fixed typo ('very' → 'venv')
     }
 
     stages {
-        stage('Cloning GitHub repo to Jenkins') {
+        stage('Cloning Github repo to Jenkins') {
             steps {
                 script {
-                    echo 'Cloning GitHub repo to Jenkins...'
+                    echo 'Cloning Github repo to Jenkins......'
                     checkout scmGit(
                         branches: [[name: '*/main']],
                         extensions: [],
@@ -22,35 +21,17 @@ pipeline {
             }
         }
 
-        stage('Setting up virtual environment and installing dependencies') {
+        stage('Setting up Virtual Environment and Installing dependencies') {
             steps {
-                echo 'Setting up virtual environment and installing dependencies...'
-                sh '''
-                    python3 -m venv ${VENV_DIR}
-                    . ${VENV_DIR}/bin/activate
-                    pip install --upgrade pip
-                    pip install -e .
-                '''
-            }
-        }
-
-        stage('Run Training Pipeline') {
-            steps {
-                echo 'Running training pipeline...'
-                sh '''
-                    . ${VENV_DIR}/bin/activate
-                    python pipeline/training_pipeline.py
-                '''
-            }
-        }
-
-        stage('Start Application') {
-            steps {
-                echo 'Starting application...'
-                sh '''
-                    . ${VENV_DIR}/bin/activate
-                    python application.py
-                '''
+                script {
+                    echo 'Setting up Virtual Environment and Installing dependencies...'
+                    sh '''
+                        python -m venv ${VENV_DIR}
+                        . ${VENV_DIR}/bin/activate
+                        pip install --upgrade pip
+                        pip install -e .
+                    '''
+                }
             }
         }
     }
